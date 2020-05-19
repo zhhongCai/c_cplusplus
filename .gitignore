@@ -3,6 +3,7 @@
 
 # Object files
 *.o
+*.out
 *.ko
 *.obj
 *.elf
@@ -50,3 +51,4 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+.vscode
