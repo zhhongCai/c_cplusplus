@@ -74,7 +74,7 @@ int icmp_unpack(char *buf, int len, int icmpid, struct ping_packet_status *curre
 	int rtt;
 
 	struct ip *ip_hdr = (struct ip *)buf;
-	iphdr_len = ip_hdr->ip_hl * 4;
+	iphdr_len = ip_hdr->ip_hl << 2;
 	struct icmp *icmp_hdr = (struct icmp *) (buf + iphdr_len);
 	// icmp包长度
 	len -= iphdr_len; 

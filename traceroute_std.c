@@ -582,7 +582,7 @@ wait_for_reply(sock, from)
 	fd_set fds;
 	struct timeval wait;
 	int cc = 0;
-	int fromlen = sizeof (*from);
+	int fromlen = sizeof(*from);
 
 	FD_ZERO(&fds);
 	FD_SET(sock, &fds);
