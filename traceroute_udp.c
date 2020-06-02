@@ -107,7 +107,7 @@ print(buf, cc, from)
 	hlen = ip->ip_hl << 2;
 	cc -= hlen;
 
-	printf("\n%s", inet_ntoa(from->sin_addr));
+	printf("%s", inet_ntoa(from->sin_addr));
 }
 
 
@@ -212,54 +212,56 @@ int main(int argc, char* argv[])
 				fprintf(stderr, "fail to select!\n");
 				break;
 			case 0:
-				printf(" * ");
+				printf("* ");
 				break;
 			default:
-			{
-				__uint32_t fromlen = sizeof(from);
-				int len = recvfrom(s, recv_buf, sizeof(recv_buf), 0, (struct sockaddr *)&from, &fromlen);
-				int i = 0;
-				(void) gettimeofday(&t2, NULL);
-				if ((i = icmp_packet_ok(recv_buf, len, seq))) {
-					if (from.sin_addr.s_addr != lastaddr) {
-						print(recv_buf, len, &from);
-						lastaddr = from.sin_addr.s_addr;
+				{
+					__uint32_t fromlen = sizeof(from);
+					int len = recvfrom(s, recv_buf, sizeof(recv_buf), 0, (struct sockaddr *)&from, &fromlen);
+					int i = 0;
+					(void) gettimeofday(&t2, NULL);
+					if ((i = icmp_packet_ok(recv_buf, len, seq))) {
+						if (from.sin_addr.s_addr != lastaddr) {
+							print(recv_buf, len, &from);
+							lastaddr = from.sin_addr.s_addr;
+						}
+						printf("  %g ms", deltaT(&t1, &t2));
+						switch(i - 1) {
+						case ICMP_UNREACH_PORT:
+							++got_there;
+							break;
+						case ICMP_UNREACH_NET:
+							++unreachable;
+							printf(" !N");
+							break;
+						case ICMP_UNREACH_HOST:
+							++unreachable;
+							printf(" !H");
+							break;
+						case ICMP_UNREACH_PROTOCOL:
+							++got_there;
+							printf(" !P");
+							break;
+						case ICMP_UNREACH_NEEDFRAG:
+							++unreachable;
+							printf(" !F");
+							break;
+						case ICMP_UNREACH_SRCFAIL:
+							++unreachable;
+							printf(" !S");
+							break;
+						}
+						break;
+					} else {
+						printf("* ");
 					}
-					printf("  %g ms", deltaT(&t1, &t2));
-					switch(i - 1) {
-					case ICMP_UNREACH_PORT:
-						++got_there;
-						break;
-					case ICMP_UNREACH_NET:
-						++unreachable;
-						printf(" !N");
-						break;
-					case ICMP_UNREACH_HOST:
-						++unreachable;
-						printf(" !H");
-						break;
-					case ICMP_UNREACH_PROTOCOL:
-						++got_there;
-						printf(" !P");
-						break;
-					case ICMP_UNREACH_NEEDFRAG:
-						++unreachable;
-						printf(" !F");
-						break;
-					case ICMP_UNREACH_SRCFAIL:
-						++unreachable;
-						printf(" !S");
-						break;
-					}
-					break;
-				} else {
-					printf(" *");
-				}
-			}	
+				}	
+			}
+			fflush(stdout);
 			if (got_there || unreachable >= 2)
 				exit(0);	
-			}
 		}
+		printf("\n");
 	}
 	
 	return 0;
