@@ -1,4 +1,4 @@
-DIRS = ch01 ch02 ch03 ch04 ch05
+DIRS = ch01 ch02 ch03 ch04 ch05 ch06 ch07 ch08
 
 all:
 	for i in $(DIRS); do \

@@ -3,14 +3,14 @@ PLATFORM=$(shell $(ROOT)/systype.sh)
 include $(ROOT)/Make.defines.$(PLATFORM)
 
 ifeq "$(PLATFORM)" "linux"
-	ZAP = 
+	ZAP = ch05_getspnam_linux 
 else
 	ZAP =
 endif
 
 
 #PROGS =	access cdpwd changemod devrdev filetype mycd umask unlink $(ZAP)
-PROGS =	ch05_getc_putc ch05_fgets ch05_pbuf ch05_tmpfile ch05_mkstemp ch05_fmemopen \
+PROGS =	ch05_getpwnam ch05_getgrname ch05_getgroups ch05_uname ch05_strftime \
 	   	$(ZAP)
 
 all:	$(PROGS)
