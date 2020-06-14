@@ -10,7 +10,8 @@ endif
 
 
 #PROGS =	access cdpwd changemod devrdev filetype mycd umask unlink $(ZAP)
-PROGS =	ch13_daemon \
+PROGS =	ch15_pipe ch15_pipe_page ch15_popen ch15_tolower ch15_popen_pclose \
+		ch15_add ch15_pipe_add \
 	   	$(ZAP)
 
 all:	$(PROGS)
